@@ -25,13 +25,13 @@ export const PrdamsPortal: React.FC<PrdamsPortalProps> = ({ onBack }) => {
   const [certificates, setCertificates] = useState<PrdamsCertificate[]>(() => portalStorage.getCertificates());
 
   // Form state for generating certificate
-  const [recipientName, setRecipientName] = useState('Shakthi J.');
-  const [recipientEmail, setRecipientEmail] = useState('shakthi@gonexora.com');
-  const [projectName, setProjectName] = useState('Nexora Autonomous AI Gateway');
+  const [recipientName, setRecipientName] = useState('');
+  const [recipientEmail, setRecipientEmail] = useState('');
+  const [projectName, setProjectName] = useState('');
   const [role, setRole] = useState('Lead AI Engineer');
   const [issueDate, setIssueDate] = useState('2026-11-13');
   const [tenure, setTenure] = useState('6 Months');
-  const [signatory, setSignatory] = useState('Trivin (Lead Architect)');
+  const [signatory, setSignatory] = useState('Trivin (Chief Architect & Lead Developer)');
 
   // Active preview certificate
   const [previewCert, setPreviewCert] = useState<PrdamsCertificate>(certificates[0]);
@@ -213,6 +213,7 @@ QR Authentication Link: https://acknowledgement-generator-roan.vercel.app/verify
                     <input
                       type="text"
                       required
+                      placeholder="e.g. Shakthi J."
                       value={recipientName}
                       onChange={e => setRecipientName(e.target.value)}
                       className="w-full mt-1 px-3 py-2 rounded-xl bg-slate-100 dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs"
@@ -223,6 +224,7 @@ QR Authentication Link: https://acknowledgement-generator-roan.vercel.app/verify
                     <input
                       type="email"
                       required
+                      placeholder="e.g. member@gonexora.com"
                       value={recipientEmail}
                       onChange={e => setRecipientEmail(e.target.value)}
                       className="w-full mt-1 px-3 py-2 rounded-xl bg-slate-100 dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs"
@@ -251,6 +253,7 @@ QR Authentication Link: https://acknowledgement-generator-roan.vercel.app/verify
                   <input
                     type="text"
                     required
+                    placeholder="e.g. Nexora One Unified Ecosystem"
                     value={projectName}
                     onChange={e => setProjectName(e.target.value)}
                     className="w-full mt-1 px-3 py-2 rounded-xl bg-slate-100 dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs"

@@ -39,3 +39,4 @@ export const prdamsSupabase = createClient(PRDAMS_SUPABASE_URL, PRDAMS_SUPABASE_
 // 4. Internship Portal Cloud Gateway
 export const INTERNSHIP_SUPABASE_URL = 'https://eyfpckbiggamoqcukdvg.supabase.co';
 export const INTERNSHIP_DB_POOLER = 'postgresql://postgres.eyfpckbiggamoqcukdvg:Trivinsakthi%40123@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?sslmode=require';
+

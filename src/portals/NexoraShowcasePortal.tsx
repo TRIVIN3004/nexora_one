@@ -23,8 +23,8 @@ export const NexoraShowcasePortal: React.FC<NexoraShowcasePortalProps> = ({ onBa
   const [needDevOps, setNeedDevOps] = useState(true);
   const [needMultiPlatform, setNeedMultiPlatform] = useState(true);
 
-  // Estimator calculation
-  const baseCost = projectType === 'ai' ? 4500 : projectType === 'enterprise' ? 6000 : projectType === 'mobile' ? 3500 : 2800;
+  // Estimator calculation (INR pricing)
+  const baseCost = projectType === 'ai' ? 150000 : projectType === 'enterprise' ? 250000 : projectType === 'mobile' ? 120000 : 85000;
   const platformMultiplier = needMultiPlatform ? 1.3 : 1.0;
   const devOpsMultiplier = needDevOps ? 1.2 : 1.0;
   const estimatedQuote = Math.round(baseCost * platformMultiplier * devOpsMultiplier);
@@ -309,8 +309,8 @@ export const NexoraShowcasePortal: React.FC<NexoraShowcasePortalProps> = ({ onBa
               <div>
                 <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Estimated Investment Estimate</span>
                 <div className="mt-2 flex items-baseline gap-1">
-                  <span className="text-4xl sm:text-5xl font-black text-brand-navy dark:text-brand-cyan">${estimatedQuote}</span>
-                  <span className="text-xs text-slate-400 font-bold">USD</span>
+                  <span className="text-4xl sm:text-5xl font-black text-brand-navy dark:text-brand-cyan">₹{estimatedQuote.toLocaleString('en-IN')}</span>
+                  <span className="text-xs text-slate-400 font-bold">INR</span>
                 </div>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
                   Includes full source code ownership, end-to-end multi-platform build assets, automated tests, and 90-day maintenance.
@@ -319,7 +319,7 @@ export const NexoraShowcasePortal: React.FC<NexoraShowcasePortalProps> = ({ onBa
 
               <div className="pt-6">
                 <button
-                  onClick={() => alert(`Quote Request sent! An architect will reach out regarding your ${timelineWeeks}-week ${projectType.toUpperCase()} build.`)}
+                  onClick={() => alert(`Quote Request for ₹${estimatedQuote.toLocaleString('en-IN')} sent! An architect will reach out regarding your ${timelineWeeks}-week ${projectType.toUpperCase()} build.`)}
                   className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-brand-blue to-brand-cyan text-white dark:text-[#06152F] font-black text-xs uppercase tracking-wider shadow-lg shadow-brand-blue/20 cursor-pointer active:scale-98 transition-all"
                 >
                   Book Architectural Consultation

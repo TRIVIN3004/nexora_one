@@ -294,25 +294,13 @@ const initialAssignments: InternshipAssignment[] = [
     id: 'asn-1',
     week: 1,
     title: 'Modern UI Architecture & State Management',
-    studentName: 'Alex Mercer',
-    githubUrl: 'https://github.com/nexora-interns/alex-ui-task',
-    demoUrl: 'https://alex-ui-demo.vercel.app',
+    studentName: 'Trivin Sakthi',
+    githubUrl: 'https://github.com/TRIVIN3004/nexora_one',
+    demoUrl: 'https://nexoratechs.xyz',
     submittedAt: '2026-11-10',
     status: 'APPROVED',
-    score: 95,
-    feedback: 'Outstanding component hierarchy and clean Tailwind styling! Evaluated by Trivin.'
-  },
-  {
-    id: 'asn-2',
-    week: 2,
-    title: 'Full-Stack REST & Supabase Integration',
-    studentName: 'Alex Mercer',
-    githubUrl: 'https://github.com/nexora-interns/alex-backend-task',
-    demoUrl: 'https://alex-api-demo.vercel.app',
-    submittedAt: '2026-11-13',
-    status: 'UNDER_REVIEW',
-    score: undefined,
-    feedback: undefined
+    score: 98,
+    feedback: 'Outstanding component hierarchy and clean multi-platform architecture! Evaluated by Trivin.'
   }
 ];
 

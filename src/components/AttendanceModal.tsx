@@ -10,7 +10,6 @@ import {
   ShieldCheck, 
   Calendar, 
   Database, 
-  Sparkles,
   Eye,
   EyeOff,
   History,
@@ -23,12 +22,18 @@ interface AttendanceModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAttendanceChanged?: () => void;
+  onLoginSuccess?: (user: DprAuthUser) => void;
+  modalTitle?: string;
+  modalSubtitle?: string;
 }
 
 export const AttendanceModal: React.FC<AttendanceModalProps> = ({ 
   isOpen, 
   onClose,
-  onAttendanceChanged 
+  onAttendanceChanged,
+  onLoginSuccess,
+  modalTitle,
+  modalSubtitle
 }) => {
   const [currentUser, setCurrentUser] = useState<DprAuthUser | null>(() => dprAttendanceService.getSavedSession());
   
@@ -99,26 +104,11 @@ export const AttendanceModal: React.FC<AttendanceModalProps> = ({
     if (result.success && result.user) {
       setCurrentUser(result.user);
       refreshAttendanceData(result.user);
+      if (onLoginSuccess) {
+        onLoginSuccess(result.user);
+      }
     } else {
       setAuthError(result.error || 'Login failed. Please check your credentials.');
-    }
-  };
-
-  // 1-Click Quick Login as Trivin
-  const handleQuickLoginTrivin = async () => {
-    setEmailOrId('trivin@nexora.com');
-    setPassword('Trivin@123');
-    setIsLoggingIn(true);
-    setAuthError(null);
-
-    const result = await dprAttendanceService.loginWithDpr('trivin@nexora.com', 'Trivin@123');
-    setIsLoggingIn(false);
-
-    if (result.success && result.user) {
-      setCurrentUser(result.user);
-      refreshAttendanceData(result.user);
-    } else {
-      setAuthError(result.error || 'Failed quick login.');
     }
   };
 
@@ -186,13 +176,13 @@ export const AttendanceModal: React.FC<AttendanceModalProps> = ({
             </div>
             <div>
               <h3 className="text-base font-black tracking-tight flex items-center gap-2">
-                DPR Attendance Portal
+                {modalTitle || 'DPR Attendance Portal'}
                 <span className="text-[9px] uppercase px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold">
                   Supabase Live
                 </span>
               </h3>
               <span className="text-[10px] text-white/70 block">
-                Independent Real-time Cloud Punch System • Developed by Trivin
+                {modalSubtitle || 'Independent Real-time Cloud Punch System • Developed by Trivin'}
               </span>
             </div>
           </div>
@@ -238,7 +228,7 @@ export const AttendanceModal: React.FC<AttendanceModalProps> = ({
                     <User className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
                     <input
                       type="text"
-                      placeholder="e.g. trivin@nexora.com or EMP-0001"
+                      placeholder="e.g. employee@nexora.com or EMP-0001"
                       value={emailOrId}
                       onChange={e => setEmailOrId(e.target.value)}
                       required
@@ -263,7 +253,7 @@ export const AttendanceModal: React.FC<AttendanceModalProps> = ({
                     <button
                       type="button"
                       onClick={() => setShowPassword(p => !p)}
-                      className="absolute right-3 top-2.5 text-slate-400 hover:text-white"
+                      className="absolute right-3 top-2.5 text-slate-400 hover:text-white cursor-pointer"
                     >
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
@@ -283,24 +273,11 @@ export const AttendanceModal: React.FC<AttendanceModalProps> = ({
                   ) : (
                     <>
                       <LogIn className="w-4 h-4" />
-                      Verify Credentials & Punch
+                      {modalTitle ? 'Verify Credentials & Access' : 'Verify Credentials & Punch'}
                     </>
                   )}
                 </button>
               </form>
-
-              {/* 1-Click Quick Demo Sign-in */}
-              <div className="pt-2 border-t border-black/5 dark:border-white/5">
-                <button
-                  type="button"
-                  onClick={handleQuickLoginTrivin}
-                  disabled={isLoggingIn}
-                  className="w-full py-2.5 px-3 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-500 dark:text-emerald-300 text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer"
-                >
-                  <Sparkles className="w-4 h-4" />
-                  Quick Login: Sign in as Trivin (EMP-0001)
-                </button>
-              </div>
             </div>
           ) : (
             /* VIEW B: USER LOGGED IN - READY TO PUNCH */

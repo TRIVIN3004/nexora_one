@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { portalStorage } from '../utils/portalStorage';
 import type { ConnectBroadcast, ConnectMeeting, ConnectWebinar, ConnectTicket } from '../utils/portalStorage';
+import { dprAttendanceService } from '../services/dprAttendanceService';
 
 interface NexoraConnectPortalProps {
   onBack: () => void;
@@ -88,10 +89,11 @@ export const NexoraConnectPortal: React.FC<NexoraConnectPortalProps> = ({ onBack
   const handleCreateBroadcast = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newBcTitle || !newBcContent) return;
+    const currentUser = dprAttendanceService.getSavedSession();
     const updated = portalStorage.saveBroadcast({
       title: newBcTitle,
       content: newBcContent,
-      author: 'Nexora Member (You)',
+      author: currentUser ? `${currentUser.name} (${currentUser.department || 'Nexora'})` : 'Nexora Member',
       category: newBcCategory,
       priority: 'NORMAL',
       timestamp: 'Just now'
@@ -118,7 +120,7 @@ export const NexoraConnectPortal: React.FC<NexoraConnectPortalProps> = ({ onBack
       time: '02:00 PM - 02:45 PM',
       platform: mtPlatform,
       link: mtPlatform === 'Google Meet' ? 'https://meet.google.com/new' : 'https://teams.microsoft.com',
-      host: 'You',
+      host: dprAttendanceService.getSavedSession()?.name || 'Nexora Host',
       participants: 4
     });
     setMeetings(updated);

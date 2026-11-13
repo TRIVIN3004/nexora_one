@@ -1,4 +1,5 @@
 import { dprSupabase } from './supabaseClients';
+import { sendAttendanceCheckInEmail, sendAttendanceCheckOutEmail } from './emailService';
 
 // ============================================================================
 // NEXORA ONE - DPR ATTENDANCE & AUTHENTICATION SERVICE
@@ -137,24 +138,8 @@ export const dprAttendanceService = {
           .ilike('id', cleanInput);
       }
 
-      // If network is offline or Supabase errored, check offline fallback for Trivin
+      // If no account found or error returned
       if (result.error || !result.data || result.data.length === 0) {
-        if (
-          (cleanInput.toLowerCase() === 'trivin@nexora.com' || cleanInput.toUpperCase() === 'EMP-0001' || cleanInput.toLowerCase() === 'testing@nexora.com') &&
-          (cleanPassword === 'Trivin@123' || cleanPassword === 'admin')
-        ) {
-          const fallbackUser: DprAuthUser = {
-            id: 'EMP-0001',
-            name: 'TRIVIN S',
-            email: 'trivin@nexora.com',
-            role: 'admin',
-            department: 'Core Architecture & Engineering',
-            assignedProjects: ['Nexora One Unified Platform']
-          };
-          this.saveSession(fallbackUser);
-          return { success: true, user: fallbackUser };
-        }
-
         if (result.error) {
           return { success: false, error: `Supabase Auth Error: ${result.error.message}` };
         }
@@ -190,23 +175,7 @@ export const dprAttendanceService = {
       this.saveSession(authenticatedUser);
       return { success: true, user: authenticatedUser };
     } catch (err: any) {
-      // Offline fallback check
-      if (
-        (cleanInput.toLowerCase() === 'trivin@nexora.com' || cleanInput.toUpperCase() === 'EMP-0001') &&
-        cleanPassword === 'Trivin@123'
-      ) {
-        const fallbackUser: DprAuthUser = {
-          id: 'EMP-0001',
-          name: 'TRIVIN S',
-          email: 'trivin@nexora.com',
-          role: 'admin',
-          department: 'Engineering',
-          assignedProjects: ['Nexora One']
-        };
-        this.saveSession(fallbackUser);
-        return { success: true, user: fallbackUser };
-      }
-      return { success: false, error: err.message || 'Authentication failed due to connection error.' };
+      return { success: false, error: err.message || 'Authentication failed. Please check network connection.' };
     }
   },
 
@@ -318,6 +287,11 @@ export const dprAttendanceService = {
     // 3. Dispatch broadcast events so UI elements across the whole app refresh
     window.dispatchEvent(new CustomEvent('nexora_attendance_updated', { detail: savedRecord }));
 
+    // 4. Automated Live Email Dispatch (via Resend)
+    sendAttendanceCheckInEmail(user, todayStr, timeStr, remarks).catch(err => {
+      console.warn('Automated check-in email alert exception:', err);
+    });
+
     return { success: true, record: savedRecord };
   },
 
@@ -375,6 +349,11 @@ export const dprAttendanceService = {
 
     window.dispatchEvent(new CustomEvent('nexora_attendance_updated', { detail: savedRecord }));
 
+    // 4. Automated Live Email Dispatch (via Resend)
+    sendAttendanceCheckOutEmail(user, todayStr, existing.checkInTime, timeStr).catch(err => {
+      console.warn('Automated check-out email alert exception:', err);
+    });
+
     return { success: true, record: savedRecord };
   },
 
@@ -416,3 +395,4 @@ export const dprAttendanceService = {
     return [];
   }
 };
+

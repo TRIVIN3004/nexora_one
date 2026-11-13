@@ -31,7 +31,7 @@ export const AppGrid: React.FC<AppGridProps> = ({
   }
 
   return (
-    <div className="grid grid-cols-2 gap-3.5 mt-4 w-full">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 w-full">
       {apps.map((app) => (
         <AppCard
           key={app.id}

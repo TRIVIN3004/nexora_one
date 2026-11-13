@@ -34,17 +34,13 @@ export const DailyProgressPortal: React.FC<DailyProgressPortalProps> = ({ onBack
   const [todayAttendance, setTodayAttendance] = useState<AttendanceRecord | null>(null);
 
   // Form State
-  const [member, setMember] = useState(currentUser?.name || 'Trivin Sakthi');
-  const [department, setDepartment] = useState(currentUser?.department || 'Engineering & Mobile');
-  const [project, setProject] = useState('Nexora One Unified Platform');
-  const [tasks, setTasks] = useState<string[]>([
-    'Configured universal iOS and Android platforms via Capacitor',
-    'Integrated DPR report generator and live Supabase cloud sync',
-    'Created cross-platform adaptive workstation layouts'
-  ]);
+  const [member, setMember] = useState(currentUser?.name || '');
+  const [department, setDepartment] = useState(currentUser?.department || '');
+  const [project, setProject] = useState('');
+  const [tasks, setTasks] = useState<string[]>([]);
   const [newTaskInput, setNewTaskInput] = useState('');
-  const [blockers, setBlockers] = useState('None. All platforms building cleanly.');
-  const [tomorrowPlan, setTomorrowPlan] = useState('Verify mobile biometric and real-time attendance web reflection.');
+  const [blockers, setBlockers] = useState('');
+  const [tomorrowPlan, setTomorrowPlan] = useState('');
   const [hours, setHours] = useState(8.0);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -344,6 +340,7 @@ VERIFICATION STATUS:
                 <label className="text-[11px] font-bold text-slate-500 uppercase block mb-1">Employee Name</label>
                 <input
                   type="text"
+                  placeholder="Enter employee name"
                   value={member}
                   onChange={e => setMember(e.target.value)}
                   required
@@ -354,6 +351,7 @@ VERIFICATION STATUS:
                 <label className="text-[11px] font-bold text-slate-500 uppercase block mb-1">Department</label>
                 <input
                   type="text"
+                  placeholder="e.g. Engineering, Mobile, AI"
                   value={department}
                   onChange={e => setDepartment(e.target.value)}
                   required
@@ -367,6 +365,7 @@ VERIFICATION STATUS:
                 <label className="text-[11px] font-bold text-slate-500 uppercase block mb-1">Active Project</label>
                 <input
                   type="text"
+                  placeholder="e.g. Nexora One Unified Platform"
                   value={project}
                   onChange={e => setProject(e.target.value)}
                   required

@@ -5,6 +5,8 @@ import { useFavorites } from './hooks/useFavorites';
 import { useRecentApps } from './hooks/useRecentApps';
 import { storage } from './utils/storage';
 import type { ThemeType } from './utils/storage';
+import { dprAttendanceService } from './services/dprAttendanceService';
+import type { DprAuthUser } from './services/dprAttendanceService';
 
 // Component imports
 import { SplashScreen } from './components/SplashScreen';
@@ -39,11 +41,41 @@ function App() {
   const [showAboutPage, setShowAboutPage] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   
+  // User Session & Authentication
+  const [currentUser, setCurrentUser] = useState<DprAuthUser | null>(() => dprAttendanceService.getSavedSession());
+  const [pendingPortal, setPendingPortal] = useState<PortalType | null>(null);
+
   // Active Core Portal state
   const [activePortal, setActivePortal] = useState<PortalType | null>(null);
 
   // Cloud Attendance Modal state
   const [isAttendanceModalOpen, setIsAttendanceModalOpen] = useState(false);
+
+  // Listen for login/logout changes
+  useEffect(() => {
+    const handleAuthChange = () => {
+      setCurrentUser(dprAttendanceService.getSavedSession());
+    };
+    window.addEventListener('nexora_auth_changed', handleAuthChange);
+    return () => window.removeEventListener('nexora_auth_changed', handleAuthChange);
+  }, []);
+
+  const handleSignOut = () => {
+    dprAttendanceService.clearSession();
+    setCurrentUser(null);
+    setActivePortal(null);
+    setPendingPortal(null);
+  };
+
+  const handleOpenPortalWithAuth = (portal: PortalType) => {
+    const user = dprAttendanceService.getSavedSession();
+    if (!user) {
+      setPendingPortal(portal);
+      setIsAttendanceModalOpen(true);
+      return;
+    }
+    setActivePortal(portal);
+  };
 
   // Desktop Responsive Mode
   const [isDesktopMode, setIsDesktopMode] = useState<boolean>(() => {
@@ -166,9 +198,9 @@ function App() {
     addRecent(app.id);
     setSelectedApp(null);
 
-    // Direct in-app portal routing
+    // Direct in-app portal routing with DPR authentication gate
     if (app.portalType) {
-      setActivePortal(app.portalType);
+      handleOpenPortalWithAuth(app.portalType);
       return;
     }
 
@@ -305,13 +337,15 @@ function App() {
         <DesktopSidebar
           activeTab={activeTab}
           onTabChange={handleTabChange}
-          onOpenPortal={setActivePortal}
+          onOpenPortal={handleOpenPortalWithAuth}
           onOpenCalendar={() => setIsCalendarOpen(true)}
           onOpenCalculator={() => setIsCalculatorOpen(true)}
           onOpenAttendance={() => setIsAttendanceModalOpen(true)}
           isDesktopMode={isDesktopMode}
           onToggleDesktopMode={toggleDesktopMode}
           activePortal={activePortal}
+          currentUser={currentUser}
+          onSignOut={handleSignOut}
         />
       )}
 
@@ -366,10 +400,25 @@ function App() {
           onClose={() => setIsCalculatorOpen(false)}
         />
 
-        {/* DPR Supabase Cloud Attendance Modal */}
+        {/* DPR Supabase Cloud Attendance & Authentication Modal */}
         <AttendanceModal
           isOpen={isAttendanceModalOpen}
-          onClose={() => setIsAttendanceModalOpen(false)}
+          onClose={() => {
+            setIsAttendanceModalOpen(false);
+            setPendingPortal(null);
+          }}
+          onAttendanceChanged={() => {
+            setCurrentUser(dprAttendanceService.getSavedSession());
+          }}
+          onLoginSuccess={(user) => {
+            setCurrentUser(user);
+            if (pendingPortal) {
+              setActivePortal(pendingPortal);
+              setPendingPortal(null);
+            }
+          }}
+          modalTitle={pendingPortal ? "DPR Authentication Required" : undefined}
+          modalSubtitle={pendingPortal ? "Please enter your DPR corporate credentials to access this portal section" : undefined}
         />
       </div>
     </div>

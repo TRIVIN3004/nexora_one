@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { portalStorage } from '../utils/portalStorage';
 import type { InternshipAssignment } from '../utils/portalStorage';
+import { dprAttendanceService } from '../services/dprAttendanceService';
 
 interface InternshipPortalProps {
   onBack: () => void;
@@ -24,20 +25,21 @@ export const InternshipPortal: React.FC<InternshipPortalProps> = ({ onBack }) =>
   const [assignments, setAssignments] = useState<InternshipAssignment[]>(() => portalStorage.getAssignments());
 
   // Student submission form
-  const [week, setWeek] = useState(3);
-  const [asnTitle, setAsnTitle] = useState('Production Capacitor Bridge & Native Storage');
-  const studentName = 'Alex Mercer';
-  const [githubUrl, setGithubUrl] = useState('https://github.com/nexora-interns/alex-capacitor-app');
-  const [demoUrl, setDemoUrl] = useState('https://alex-nexora-app.vercel.app');
+  const [week, setWeek] = useState(1);
+  const [asnTitle, setAsnTitle] = useState('');
+  const user = dprAttendanceService.getSavedSession();
+  const studentName = user?.name || 'Nexora Intern';
+  const [githubUrl, setGithubUrl] = useState('');
+  const [demoUrl, setDemoUrl] = useState('');
 
   // Mentor evaluation state
   const [selectedAsn, setSelectedAsn] = useState<InternshipAssignment | null>(null);
-  const [scoreInput, setScoreInput] = useState(96);
-  const [feedbackInput, setFeedbackInput] = useState('Exemplary implementation! Clean code structure and robust offline caching.');
+  const [scoreInput, setScoreInput] = useState(90);
+  const [feedbackInput, setFeedbackInput] = useState('');
 
   const handleSubmitAssignment = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!githubUrl) return;
+    if (!githubUrl || !asnTitle) return;
 
     const updated = portalStorage.saveAssignment({
       week,
@@ -48,6 +50,9 @@ export const InternshipPortal: React.FC<InternshipPortalProps> = ({ onBack }) =>
     });
 
     setAssignments(updated);
+    setAsnTitle('');
+    setGithubUrl('');
+    setDemoUrl('');
     alert('🎉 Assignment Submitted Successfully to Mentor Review Queue!');
   };
 
@@ -176,6 +181,7 @@ export const InternshipPortal: React.FC<InternshipPortalProps> = ({ onBack }) =>
                       <input
                         type="text"
                         required
+                        placeholder="e.g. Production Mobile Setup & Architecture"
                         value={asnTitle}
                         onChange={e => setAsnTitle(e.target.value)}
                         className="w-full mt-1 px-3 py-2 rounded-xl bg-slate-100 dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs"
@@ -188,6 +194,7 @@ export const InternshipPortal: React.FC<InternshipPortalProps> = ({ onBack }) =>
                     <input
                       type="url"
                       required
+                      placeholder="https://github.com/your-username/project-repo"
                       value={githubUrl}
                       onChange={e => setGithubUrl(e.target.value)}
                       className="w-full mt-1 px-3 py-2 rounded-xl bg-slate-100 dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs"
@@ -195,9 +202,10 @@ export const InternshipPortal: React.FC<InternshipPortalProps> = ({ onBack }) =>
                   </div>
 
                   <div>
-                    <label className="text-[11px] font-bold text-slate-500">Live Demo URL</label>
+                    <label className="text-[11px] font-bold text-slate-500">Live Demo URL (Optional)</label>
                     <input
                       type="url"
+                      placeholder="https://your-demo.vercel.app"
                       value={demoUrl}
                       onChange={e => setDemoUrl(e.target.value)}
                       className="w-full mt-1 px-3 py-2 rounded-xl bg-slate-100 dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs"

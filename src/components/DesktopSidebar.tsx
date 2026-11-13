@@ -14,10 +14,13 @@ import {
   Monitor, 
   Smartphone,
   Clock,
-  Sparkles
+  Sparkles,
+  LogIn,
+  LogOut
 } from 'lucide-react';
 import { Logo } from './Logo';
 import type { TabType } from './BottomNavigation';
+import type { DprAuthUser } from '../services/dprAttendanceService';
 
 interface DesktopSidebarProps {
   activeTab: TabType;
@@ -29,6 +32,8 @@ interface DesktopSidebarProps {
   isDesktopMode: boolean;
   onToggleDesktopMode: () => void;
   activePortal: string | null;
+  currentUser?: DprAuthUser | null;
+  onSignOut?: () => void;
 }
 
 export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
@@ -40,7 +45,9 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
   onOpenAttendance,
   isDesktopMode,
   onToggleDesktopMode,
-  activePortal
+  activePortal,
+  currentUser,
+  onSignOut
 }) => {
   const mainNav = [
     { id: 'home' as TabType, label: 'Workspace Home', icon: Home },
@@ -72,6 +79,44 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
             </span>
           </div>
         </div>
+
+        {/* User Session Bar */}
+        {currentUser ? (
+          <div className="mx-1 p-2.5 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 flex items-center justify-between shadow-xs">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-brand-blue to-brand-cyan text-white text-xs font-black flex items-center justify-center shrink-0 shadow-sm">
+                {currentUser.name.slice(0, 2).toUpperCase()}
+              </div>
+              <div className="truncate min-w-0">
+                <span className="text-xs font-black text-brand-navy dark:text-white block truncate">
+                  {currentUser.name}
+                </span>
+                <span className="text-[9px] text-brand-blue dark:text-brand-cyan font-mono block">
+                  {currentUser.id}
+                </span>
+              </div>
+            </div>
+            {onSignOut && (
+              <button
+                onClick={onSignOut}
+                title="Sign Out / Switch DPR User"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-500/10 transition-colors cursor-pointer shrink-0"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+        ) : (
+          <div className="px-1">
+            <button
+              onClick={onOpenAttendance}
+              className="w-full py-2.5 px-3 rounded-xl bg-brand-blue/10 hover:bg-brand-blue/20 border border-brand-blue/20 text-brand-blue dark:text-brand-cyan text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer"
+            >
+              <LogIn className="w-3.5 h-3.5" />
+              Sign In with DPR
+            </button>
+          </div>
+        )}
 
         {/* Live Attendance Punch Button */}
         <div className="px-1">
@@ -174,7 +219,7 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
       </div>
 
       {/* Footer Controls */}
-      <div className="pt-4 border-t border-black/5 dark:border-white/10 space-y-2">
+      <div className="pt-4 pb-4 border-t border-black/5 dark:border-white/10 space-y-2 shrink-0">
         {/* Toggle Mode */}
         <button
           onClick={onToggleDesktopMode}

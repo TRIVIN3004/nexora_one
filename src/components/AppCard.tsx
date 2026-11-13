@@ -76,7 +76,7 @@ export const AppCard: React.FC<AppCardProps> = ({
       onMouseDown={handleTouchStart}
       onMouseUp={handleTouchEnd}
       onMouseLeave={handleTouchEnd}
-      className={`glass-effect relative flex flex-col justify-between items-start rounded-3xl p-5 aspect-square cursor-pointer active:scale-95 transition-all duration-200 select-none overflow-hidden group ${
+      className={`glass-effect relative flex flex-col justify-between items-start rounded-2xl sm:rounded-3xl p-4 sm:p-5 min-h-[175px] h-full cursor-pointer active:scale-95 transition-all duration-200 select-none overflow-hidden group ${
         isPressing ? 'scale-97 border-brand-cyan/40 bg-brand-cyan/5' : ''
       }`}
       style={{

@@ -71,8 +71,8 @@ export const Home: React.FC<HomeProps> = ({
   return (
     <div className="flex-grow flex flex-col p-5 pb-24 overflow-y-auto no-scrollbar page-enter page-enter-active">
       {/* Top Header Row */}
-      <div className="flex justify-between items-center w-full mt-2">
-        <div className="flex items-center gap-3">
+      <div className="flex justify-between items-center w-full mt-2 shrink-0">
+        <div className="flex items-center gap-3 md:hidden">
           <Logo size={42} animated />
           <div>
             <h1 className="text-xl font-black text-brand-navy dark:text-white m-0 tracking-tight leading-none">
@@ -85,26 +85,28 @@ export const Home: React.FC<HomeProps> = ({
         </div>
 
         {/* Dynamic Online/Offline Indicator */}
-        <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-[10px] font-semibold tracking-wide ${
-          isOnline 
-            ? 'bg-emerald-500/10 border-emerald-500/25 text-emerald-400' 
-            : 'bg-red-500/10 border-red-500/25 text-red-400'
-        }`}>
-          <span className={`w-1.5 h-1.5 rounded-full status-dot ${
-            isOnline ? 'bg-emerald-500 after:bg-emerald-400' : 'bg-red-500 after:bg-red-400'
-          }`} />
-          <span>{isOnline ? 'Online' : 'Offline Mode'}</span>
+        <div className="flex items-center gap-2 ml-auto">
+          <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-[10px] font-semibold tracking-wide ${
+            isOnline 
+              ? 'bg-emerald-500/10 border-emerald-500/25 text-emerald-400' 
+              : 'bg-red-500/10 border-red-500/25 text-red-400'
+          }`}>
+            <span className={`w-1.5 h-1.5 rounded-full status-dot ${
+              isOnline ? 'bg-emerald-500 after:bg-emerald-400' : 'bg-red-500 after:bg-red-400'
+            }`} />
+            <span>{isOnline ? 'Live Cloud Connected' : 'Offline Mode'}</span>
+          </div>
         </div>
       </div>
 
       {/* Greeting Banner */}
-      <div className="mt-6">
+      <div className="mt-4 md:mt-2 shrink-0">
         <h2 className="text-2xl font-black text-brand-navy dark:text-white leading-tight">{getGreeting()}</h2>
         <p className="text-sm text-brand-secondary">Welcome to the Nexora ecosystem.</p>
       </div>
 
       {/* Corporate Ecosystem Metric Banner */}
-      <div className="mt-5 glass-effect rounded-[28px] p-5 border border-brand-blue/15 dark:border-brand-cyan/15 relative overflow-hidden">
+      <div className="mt-5 glass-effect rounded-[28px] p-5 border border-brand-blue/15 dark:border-brand-cyan/15 relative overflow-hidden shrink-0">
         <div className="absolute top-0 right-0 w-32 h-32 bg-brand-blue/5 dark:bg-brand-cyan/5 rounded-full filter blur-2xl pointer-events-none" />
         <div className="flex justify-between items-center relative z-10">
           <div className="flex flex-col">
@@ -128,7 +130,7 @@ export const Home: React.FC<HomeProps> = ({
       </div>
 
       {/* DPR Attendance Punch Banner (Direct Cloud Sync) */}
-      <div className="mt-4 glass-effect rounded-[28px] p-4 border border-emerald-500/25 dark:border-emerald-500/35 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-cyan-500/10 relative overflow-hidden">
+      <div className="mt-4 glass-effect rounded-[28px] p-4 border border-emerald-500/25 dark:border-emerald-500/35 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-cyan-500/10 relative overflow-hidden shrink-0">
         <div className="flex items-center justify-between gap-3 relative z-10">
           <div className="flex items-center gap-3 min-w-0">
             <div className="w-11 h-11 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center border border-emerald-500/30 shadow-xs shrink-0">
@@ -175,7 +177,7 @@ export const Home: React.FC<HomeProps> = ({
       </div>
 
       {/* 5 Core Portals Showcase */}
-      <div className="mt-6 select-none">
+      <div className="mt-6 select-none shrink-0">
         <div className="flex justify-between items-center mb-2 px-1">
           <h3 className="text-sm font-bold text-brand-navy dark:text-white tracking-wide uppercase">Core Portals</h3>
           <span className="text-[10px] text-brand-blue dark:text-brand-cyan font-bold">5 Portals Unified</span>
@@ -213,7 +215,7 @@ export const Home: React.FC<HomeProps> = ({
 
       {/* Recently Used Horizontal launcher */}
       {recentApps.length > 0 && (
-        <div className="mt-6 select-none">
+        <div className="mt-6 select-none shrink-0">
           <div className="flex justify-between items-center mb-2 px-1">
             <h3 className="text-sm font-bold text-brand-navy dark:text-white tracking-wide uppercase">Recently Used</h3>
             <span className="text-[10px] text-brand-secondary">Last {recentApps.length} opened</span>
@@ -244,7 +246,7 @@ export const Home: React.FC<HomeProps> = ({
       )}
 
       {/* Favorites Pinned Area */}
-      <div className="mt-6 flex-grow">
+      <div className="mt-6 shrink-0">
         <div className="flex justify-between items-center mb-3.5 px-1">
           <div className="flex items-center gap-1.5 text-brand-gold">
             <Star className="w-4 h-4 fill-brand-gold text-brand-gold" />
@@ -256,7 +258,7 @@ export const Home: React.FC<HomeProps> = ({
         </div>
 
         {favoriteApps.length > 0 ? (
-          <div className="grid grid-cols-2 gap-3.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
             {favoriteApps.map((app) => (
               <AppCard
                 key={app.id}
@@ -288,7 +290,7 @@ export const Home: React.FC<HomeProps> = ({
       </div>
 
       {/* Footer Attribution - Developed by Trivin */}
-      <div className="mt-10 flex flex-col items-center text-center pb-2">
+      <div className="mt-10 flex flex-col items-center text-center pb-2 shrink-0">
         <div className="w-8 h-[1px] bg-black/10 dark:bg-white/10 mb-2" />
         <span className="text-[10px] font-black uppercase tracking-widest text-brand-blue dark:text-brand-cyan">
           Developed by Trivin
