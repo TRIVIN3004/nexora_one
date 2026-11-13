@@ -31,7 +31,7 @@ export const PrdamsPortal: React.FC<PrdamsPortalProps> = ({ onBack }) => {
   const [role, setRole] = useState('Lead AI Engineer');
   const [issueDate, setIssueDate] = useState('2026-11-13');
   const [tenure, setTenure] = useState('6 Months');
-  const [signatory, setSignatory] = useState('Aakash Raj');
+  const [signatory, setSignatory] = useState('Trivin (Lead Architect)');
 
   // Active preview certificate
   const [previewCert, setPreviewCert] = useState<PrdamsCertificate>(certificates[0]);
@@ -499,6 +499,17 @@ QR Authentication Link: https://acknowledgement-generator-roan.vercel.app/verify
             </div>
           </div>
         )}
+
+        {/* Footer Attribution */}
+        <div className="mt-8 flex flex-col items-center text-center pb-2">
+          <div className="w-8 h-[1px] bg-black/10 dark:bg-white/10 mb-2" />
+          <span className="text-[10px] font-black uppercase tracking-widest text-brand-blue dark:text-brand-cyan">
+            Developed by Trivin
+          </span>
+          <span className="text-[8px] text-slate-400 font-semibold tracking-wider">
+            Chief Architect & Lead Developer • Nexora Technologies
+          </span>
+        </div>
 
       </div>
     </PortalWrapper>

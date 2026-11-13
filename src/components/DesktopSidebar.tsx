@@ -12,7 +12,9 @@ import {
   Calendar, 
   Calculator, 
   Monitor, 
-  Smartphone
+  Smartphone,
+  Clock,
+  Sparkles
 } from 'lucide-react';
 import { Logo } from './Logo';
 import type { TabType } from './BottomNavigation';
@@ -23,6 +25,7 @@ interface DesktopSidebarProps {
   onOpenPortal: (portalType: 'connect' | 'showcase' | 'dpr' | 'prdams' | 'internship') => void;
   onOpenCalendar: () => void;
   onOpenCalculator: () => void;
+  onOpenAttendance: () => void;
   isDesktopMode: boolean;
   onToggleDesktopMode: () => void;
   activePortal: string | null;
@@ -34,6 +37,7 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
   onOpenPortal,
   onOpenCalendar,
   onOpenCalculator,
+  onOpenAttendance,
   isDesktopMode,
   onToggleDesktopMode,
   activePortal
@@ -67,6 +71,29 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
               DESKTOP WORKSTATION
             </span>
           </div>
+        </div>
+
+        {/* Live Attendance Punch Button */}
+        <div className="px-1">
+          <button
+            onClick={onOpenAttendance}
+            className="w-full flex items-center justify-between p-2.5 rounded-2xl bg-gradient-to-r from-emerald-500/15 to-cyan-500/15 border border-emerald-500/30 text-emerald-600 dark:text-emerald-300 hover:from-emerald-500/25 hover:to-cyan-500/25 transition-all cursor-pointer group shadow-sm active:scale-98"
+          >
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-xl bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-xs">
+                <Clock className="w-4 h-4 animate-pulse" />
+              </div>
+              <div className="text-left min-w-0">
+                <span className="text-xs font-black block tracking-tight text-brand-navy dark:text-white">
+                  Mark Attendance
+                </span>
+                <span className="text-[9px] text-emerald-500 font-bold block truncate">
+                  Supabase Live Sync
+                </span>
+              </div>
+            </div>
+            <Sparkles className="w-3.5 h-3.5 text-emerald-500 group-hover:scale-110 transition-transform shrink-0" />
+          </button>
         </div>
 
         {/* Main Navigation */}
@@ -161,9 +188,13 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
           <span className="text-[10px] uppercase font-bold text-slate-400">Toggle</span>
         </button>
 
-        <div className="px-2 py-1 flex items-center justify-between text-[10px] text-slate-400 font-medium">
-          <span>v2.0 • Multi-Platform</span>
-          <span className="text-emerald-500 font-bold">Android / iOS / Win</span>
+        <div className="px-2 py-1 flex flex-col items-center text-center">
+          <span className="text-[10px] font-extrabold text-brand-blue dark:text-brand-cyan tracking-wider">
+            Developed by Trivin
+          </span>
+          <span className="text-[8px] text-slate-400 font-medium">
+            Chief Architect & Lead Developer
+          </span>
         </div>
       </div>
     </aside>

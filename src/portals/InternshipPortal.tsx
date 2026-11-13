@@ -440,6 +440,17 @@ export const InternshipPortal: React.FC<InternshipPortalProps> = ({ onBack }) =>
           </div>
         )}
 
+        {/* Footer Attribution */}
+        <div className="mt-8 flex flex-col items-center text-center pb-2">
+          <div className="w-8 h-[1px] bg-black/10 dark:bg-white/10 mb-2" />
+          <span className="text-[10px] font-black uppercase tracking-widest text-brand-blue dark:text-brand-cyan">
+            Developed by Trivin
+          </span>
+          <span className="text-[8px] text-slate-400 font-semibold tracking-wider">
+            Chief Architect & Lead Developer • Nexora Technologies
+          </span>
+        </div>
+
       </div>
     </PortalWrapper>
   );

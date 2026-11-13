@@ -20,11 +20,12 @@ import type { ConnectBroadcast, ConnectMeeting, ConnectWebinar, ConnectTicket } 
 
 interface NexoraConnectPortalProps {
   onBack: () => void;
+  onOpenAttendance?: () => void;
 }
 
 type TabType = 'broadcasts' | 'attendance' | 'meetings' | 'tickets' | 'knowledge' | 'games' | 'verify';
 
-export const NexoraConnectPortal: React.FC<NexoraConnectPortalProps> = ({ onBack }) => {
+export const NexoraConnectPortal: React.FC<NexoraConnectPortalProps> = ({ onBack, onOpenAttendance }) => {
   const [activeTab, setActiveTab] = useState<TabType>('broadcasts');
 
   // State
@@ -53,6 +54,10 @@ export const NexoraConnectPortal: React.FC<NexoraConnectPortalProps> = ({ onBack
 
   // Attendance toggle
   const handleToggleAttendance = () => {
+    if (onOpenAttendance) {
+      onOpenAttendance();
+      return;
+    }
     if (attendance.clockedIn) {
       const hours = attendance.todayHours + (sessionSeconds / 3600);
       const newState = {
@@ -317,6 +322,17 @@ export const NexoraConnectPortal: React.FC<NexoraConnectPortalProps> = ({ onBack
               >
                 {attendance.clockedIn ? 'Punch Out & Save Hours' : 'Punch In Now (Clock In)'}
               </button>
+
+              {onOpenAttendance && (
+                <button
+                  type="button"
+                  onClick={onOpenAttendance}
+                  className="w-full py-2.5 px-3 rounded-xl bg-brand-blue/10 hover:bg-brand-blue/20 border border-brand-blue/20 text-brand-blue dark:text-brand-cyan text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2"
+                >
+                  <ShieldCheck className="w-4 h-4" />
+                  <span>DPR Supabase Cloud Attendance (Direct Web Sync)</span>
+                </button>
+              )}
             </div>
 
             <div className="p-5 rounded-3xl bg-white dark:bg-[#06152F]/70 border border-black/5 dark:border-white/10 shadow-sm space-y-4">

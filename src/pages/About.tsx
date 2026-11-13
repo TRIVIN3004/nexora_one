@@ -112,11 +112,35 @@ export const About: React.FC<AboutProps> = ({ onBackToSettings }) => {
         </div>
       </div>
 
+      {/* Developer Spotlight */}
+      <div className="mt-5 glass-effect rounded-2xl p-4 border border-brand-blue/20 dark:border-brand-cyan/20 bg-gradient-to-br from-brand-blue/10 via-purple-500/5 to-brand-cyan/10">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-blue to-brand-cyan text-white font-black text-base flex items-center justify-center shadow-md shrink-0">
+            TS
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h4 className="text-sm font-black text-brand-navy dark:text-white">Trivin</h4>
+              <span className="text-[9px] uppercase px-2 py-0.5 rounded-full bg-brand-cyan/20 text-brand-cyan font-extrabold border border-brand-cyan/30">
+                Lead Architect
+              </span>
+            </div>
+            <p className="text-xs text-brand-blue dark:text-brand-cyan font-bold mt-0.5">
+              Developed by Trivin
+            </p>
+            <p className="text-[10px] text-brand-secondary mt-1 leading-snug">
+              Chief Architect & Lead Developer behind Nexora One universal multi-platform engine, Supabase database integration, and cross-portal synchronizer.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Corporate Tagline Footer */}
       <div className="mt-8 flex flex-col items-center text-center pb-2">
-        <div className="w-8 h-[1px] bg-black/10 dark:bg-white/10 mb-4" />
+        <div className="w-8 h-[1px] bg-black/10 dark:bg-white/10 mb-3" />
         <span className="text-xs tracking-[0.25em] text-brand-blue dark:text-brand-cyan font-extrabold">NEXORA TECHNOLOGIES</span>
-        <span className="text-[8px] tracking-[0.3em] text-gray-500 font-bold mt-1">BUILDING TOMORROW, TODAY</span>
+        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1">DEVELOPED BY TRIVIN</span>
+        <span className="text-[8px] tracking-[0.3em] text-gray-500 font-bold mt-0.5">BUILDING TOMORROW, TODAY</span>
       </div>
     </div>
   );

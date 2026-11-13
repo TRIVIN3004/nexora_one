@@ -1,13 +1,25 @@
 // Unified Portal Storage & Offline State Manager for Nexora One
+// Developed by Trivin
 
-export interface ConnectUser {
+export interface AuthUser {
   id: string;
   name: string;
   email: string;
-  role: 'ADMIN' | 'EMPLOYEE';
+  role: 'ADMIN' | 'EMPLOYEE' | 'MENTOR' | 'STUDENT';
   designation: string;
-  status: 'ONLINE' | 'AWAY' | 'IN_MEETING' | 'OFFLINE';
+  department: string;
+  isLoggedIn: boolean;
 }
+
+export const defaultTrivinUser: AuthUser = {
+  id: 'NX-EMP-TRIVIN',
+  name: 'Trivin',
+  email: 'trivin@nexoratechs.com',
+  role: 'ADMIN',
+  designation: 'Lead Developer & Chief Architect',
+  department: 'Core Engineering & Architecture',
+  isLoggedIn: true
+};
 
 export interface ConnectBroadcast {
   id: string;
@@ -52,6 +64,17 @@ export interface ConnectTicket {
   createdAt: string;
 }
 
+export interface AttendanceRecord {
+  id: string;
+  userId: string;
+  userName: string;
+  date: string;
+  checkInTime: string;
+  checkOutTime: string | null;
+  hoursWorked: number;
+  status: 'ACTIVE' | 'COMPLETED';
+}
+
 export interface DprEntry {
   id: string;
   date: string;
@@ -91,37 +114,37 @@ export interface InternshipAssignment {
   feedback?: string;
 }
 
-// Initial Seed Data
+// Initial Seed Data with Trivin
 const initialBroadcasts: ConnectBroadcast[] = [
   {
     id: 'bc-1',
     title: 'Nexora One Unified Platform Release v2.0',
-    content: 'All 5 core Nexora portals have been successfully merged into Nexora One for Android, iOS, and Desktop. Offline capability enabled.',
-    author: 'Aakash Raj (Co-Founder & CTO)',
+    content: 'All 5 core Nexora portals have been merged into Nexora One for Android, iOS, and Desktop by Trivin. Full offline attendance and DPR logging enabled.',
+    author: 'Trivin (Lead Developer & Chief Architect)',
     category: 'Engineering',
     priority: 'PINNED',
     timestamp: 'Today at 09:30 AM',
-    likes: 42
+    likes: 54
   },
   {
     id: 'bc-2',
-    title: 'Upcoming Tech Webinar: Enterprise Agentic AI Swarms',
-    content: 'Join us this Friday for a deep dive into autonomous multi-agent systems and real-time inference on edge devices.',
-    author: 'Arutselvan (AI Research Lead)',
+    title: 'Multi-Platform Sync: Android, iOS & Desktop Ready',
+    content: 'Capacitor Android and iOS bridges, along with Electron desktop packaging, are fully operational.',
+    author: 'Trivin (Lead Developer)',
     category: 'Executive',
     priority: 'NORMAL',
     timestamp: 'Yesterday at 04:15 PM',
-    likes: 28
+    likes: 42
   },
   {
     id: 'bc-3',
-    title: 'Monthly DPR Submission Audit Completed',
-    content: 'The DPR compliance across all engineering squads reached 98.4%. Great work on accurate work logging!',
-    author: 'Naveen (Operations Lead)',
+    title: 'Portal Security & Role Verification Standard v2',
+    content: 'PRDAMS cryptographic certificate verification and attendance timecards are synchronized to the active employee profile.',
+    author: 'Trivin (Lead Developer)',
     category: 'General',
     priority: 'NORMAL',
     timestamp: '2 days ago',
-    likes: 35
+    likes: 38
   }
 ];
 
@@ -134,7 +157,7 @@ const initialMeetings: ConnectMeeting[] = [
     time: '10:00 AM - 11:00 AM',
     platform: 'Google Meet',
     link: 'https://meet.google.com/nex-arch-sync',
-    host: 'Aakash Raj',
+    host: 'Trivin',
     participants: 8
   },
   {
@@ -145,7 +168,7 @@ const initialMeetings: ConnectMeeting[] = [
     time: '03:00 PM - 04:30 PM',
     platform: 'MS Teams',
     link: 'https://teams.microsoft.com/l/meetup/nexora-demo',
-    host: 'Sharon J.',
+    host: 'Trivin',
     participants: 24
   }
 ];
@@ -153,8 +176,8 @@ const initialMeetings: ConnectMeeting[] = [
 const initialWebinars: ConnectWebinar[] = [
   {
     id: 'wb-1',
-    title: 'Building Production AI Agents with Gemini & Antigravity',
-    speaker: 'Aakash Raj, Founder & Chief Architect',
+    title: 'Building Production AI Agents & Multi-Platform Systems',
+    speaker: 'Trivin, Lead Developer & Chief Architect',
     date: 'Nov 20, 2026',
     time: '05:00 PM IST',
     duration: '90 Mins',
@@ -164,7 +187,7 @@ const initialWebinars: ConnectWebinar[] = [
   {
     id: 'wb-2',
     title: 'Full-Stack Mobile Apps with React 19 & Capacitor',
-    speaker: 'Trivin Sakthi, Lead Mobile Engineer',
+    speaker: 'Trivin, Lead Developer & Chief Architect',
     date: 'Nov 27, 2026',
     time: '04:00 PM IST',
     duration: '60 Mins',
@@ -192,12 +215,35 @@ const initialTickets: ConnectTicket[] = [
   }
 ];
 
+const initialAttendanceHistory: AttendanceRecord[] = [
+  {
+    id: 'att-01',
+    userId: 'NX-EMP-TRIVIN',
+    userName: 'Trivin',
+    date: new Date(Date.now() - 86400000).toISOString().split('T')[0],
+    checkInTime: '09:00 AM',
+    checkOutTime: '05:30 PM',
+    hoursWorked: 8.5,
+    status: 'COMPLETED'
+  },
+  {
+    id: 'att-02',
+    userId: 'NX-EMP-TRIVIN',
+    userName: 'Trivin',
+    date: new Date(Date.now() - 172800000).toISOString().split('T')[0],
+    checkInTime: '09:15 AM',
+    checkOutTime: '05:45 PM',
+    hoursWorked: 8.5,
+    status: 'COMPLETED'
+  }
+];
+
 const initialDprList: DprEntry[] = [
   {
     id: 'dpr-01',
     date: new Date().toISOString().split('T')[0],
-    member: 'Trivin Sakthi',
-    department: 'Full-Stack & Mobile',
+    member: 'Trivin',
+    department: 'Core Engineering & Architecture',
     project: 'Nexora One',
     tasksCompleted: [
       'Configured unified mobile & desktop responsive shell',
@@ -213,15 +259,15 @@ const initialDprList: DprEntry[] = [
   {
     id: 'dpr-02',
     date: new Date(Date.now() - 86400000).toISOString().split('T')[0],
-    member: 'Trivin Sakthi',
-    department: 'Full-Stack & Mobile',
+    member: 'Trivin',
+    department: 'Core Engineering & Architecture',
     project: 'Nexora Connect',
     tasksCompleted: [
       'Implemented offline attendance punch card with live timer',
       'Added stress relief mini-games suite',
       'Configured meeting room integration'
     ],
-    blockers: 'Minor styling adjustment on tablet aspect ratios.',
+    blockers: 'None.',
     tomorrowPlan: 'Unify with Nexora One master app.',
     hoursWorked: 8.0,
     submittedAt: '06:00 PM'
@@ -232,26 +278,14 @@ const initialCertificates: PrdamsCertificate[] = [
   {
     id: 'PRD-2026-001',
     hash: 'NX-8F92A1-VERIFIED',
-    recipientName: 'Shakthi J.',
-    recipientEmail: 'shakthi@gonexora.com',
-    projectName: 'Nexora Autonomous AI Gateway',
-    role: 'Lead AI Engineer',
+    recipientName: 'Trivin',
+    recipientEmail: 'trivin@nexoratechs.com',
+    projectName: 'Nexora One & Unified Portals Suite',
+    role: 'Lead Developer & Chief Architect',
     issueDate: '2026-10-15',
-    tenure: '6 Months',
+    tenure: 'Permanent',
     verified: true,
-    signature: 'Aakash Raj'
-  },
-  {
-    id: 'PRD-2026-002',
-    hash: 'NX-3D41E7-VERIFIED',
-    recipientName: 'Sharon',
-    recipientEmail: 'sharon@gonexora.com',
-    projectName: 'Nexora Connect Workspace',
-    role: 'Senior Product Engineer',
-    issueDate: '2026-10-20',
-    tenure: '6 Months',
-    verified: true,
-    signature: 'Naveen'
+    signature: 'Trivin (Lead Architect)'
   }
 ];
 
@@ -266,7 +300,7 @@ const initialAssignments: InternshipAssignment[] = [
     submittedAt: '2026-11-10',
     status: 'APPROVED',
     score: 95,
-    feedback: 'Outstanding component hierarchy and clean Tailwind styling!'
+    feedback: 'Outstanding component hierarchy and clean Tailwind styling! Evaluated by Trivin.'
   },
   {
     id: 'asn-2',
@@ -284,6 +318,18 @@ const initialAssignments: InternshipAssignment[] = [
 
 // Helper functions for localStorage persistence
 export const portalStorage = {
+  // Auth user state
+  getAuthUser: (): AuthUser => {
+    const raw = localStorage.getItem('nexora_auth_user');
+    return raw ? JSON.parse(raw) : defaultTrivinUser;
+  },
+  setAuthUser: (user: AuthUser) => {
+    localStorage.setItem('nexora_auth_user', JSON.stringify(user));
+  },
+  logout: () => {
+    localStorage.setItem('nexora_auth_user', JSON.stringify({ ...defaultTrivinUser, isLoggedIn: false }));
+  },
+
   // Connect data
   getBroadcasts: (): ConnectBroadcast[] => {
     const raw = localStorage.getItem('nexora_connect_broadcasts');
@@ -338,6 +384,34 @@ export const portalStorage = {
     return updated;
   },
 
+  // Attendance data
+  getAttendanceStatus: () => {
+    const raw = localStorage.getItem('nexora_attendance_state');
+    if (raw) return JSON.parse(raw);
+    return {
+      clockedIn: false,
+      clockInTime: null as string | null,
+      todayHours: 0
+    };
+  },
+  setAttendanceStatus: (status: { clockedIn: boolean; clockInTime: string | null; todayHours: number }) => {
+    localStorage.setItem('nexora_attendance_state', JSON.stringify(status));
+  },
+  getAttendanceHistory: (): AttendanceRecord[] => {
+    const raw = localStorage.getItem('nexora_attendance_history');
+    return raw ? JSON.parse(raw) : initialAttendanceHistory;
+  },
+  recordAttendancePunch: (punch: Omit<AttendanceRecord, 'id'>) => {
+    const history = portalStorage.getAttendanceHistory();
+    const newRecord: AttendanceRecord = {
+      ...punch,
+      id: `att-${Date.now()}`
+    };
+    const updated = [newRecord, ...history];
+    localStorage.setItem('nexora_attendance_history', JSON.stringify(updated));
+    return updated;
+  },
+
   // DPR data
   getDprs: (): DprEntry[] => {
     const raw = localStorage.getItem('nexora_dpr_entries');
@@ -353,18 +427,6 @@ export const portalStorage = {
     const updated = [newEntry, ...all];
     localStorage.setItem('nexora_dpr_entries', JSON.stringify(updated));
     return updated;
-  },
-  getAttendanceStatus: () => {
-    const raw = localStorage.getItem('nexora_attendance_state');
-    if (raw) return JSON.parse(raw);
-    return {
-      clockedIn: false,
-      clockInTime: null as string | null,
-      todayHours: 0
-    };
-  },
-  setAttendanceStatus: (status: { clockedIn: boolean; clockInTime: string | null; todayHours: number }) => {
-    localStorage.setItem('nexora_attendance_state', JSON.stringify(status));
   },
 
   // PRDAMS data
@@ -410,4 +472,3 @@ export const portalStorage = {
     return updated;
   }
 };
-

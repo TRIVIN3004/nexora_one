@@ -134,4 +134,23 @@ D:\Nexora one\
 └── vite.config.ts              # Vite & PWA configuration
 ```
 
-© 2026 Nexora Technologies. All rights reserved.
+### 4. ☁️ Live Supabase Cloud Backends & Databases
+Nexora One connects directly to the production cloud databases for seamless cross-platform and web application real-time synchronization:
+- **DPR & Attendance Database**: `https://qwvdyyeyzpqtxqzithso.supabase.co` (`users`, `attendance`, `attendance_settings`, `reports`, `leave_applications`)
+  - **Independent Attendance Punch**: Authenticates against DPR corporate credentials and writes unique punch records (`ATT-YYYY-MM-DD-EMP_ID`) to Supabase.
+  - **Live Web Sync**: Immediately reflected across the DPR web application and desktop/mobile clients.
+- **Nexora Connect Cloud Database**: `https://fygjvahzrgkuyevgvbik.supabase.co` (`users`, `webinars`, `meetings`, `tickets`, `knowledge_notes`, `company_messages`)
+- **PRDAMS Registry Database**: `https://kuvlsmcdxxfspabovunh.supabase.co` (`projects`, `roles`, `acknowledgements`)
+- **Internship Cloud Gateway**: `https://eyfpckbiggamoqcukdvg.supabase.co`
+
+---
+
+## 👨‍💻 Developer & Lead Architect
+**Developed by Trivin**  
+*Chief Architect & Lead Developer — Nexora Technologies*
+
+All portals, multi-platform runtime engines, Supabase cloud integrations, and workstation responsive interfaces were designed and engineered by Trivin.
+
+---
+
+© 2026 Nexora Technologies. Developed by Trivin. All rights reserved.

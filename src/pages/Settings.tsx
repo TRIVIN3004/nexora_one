@@ -314,8 +314,11 @@ export const Settings: React.FC<SettingsProps> = ({
         {/* Brand version info */}
         <div className="flex flex-col items-center justify-center mt-2 text-center text-brand-secondary">
           <span className="text-xs font-bold text-brand-navy dark:text-white">Nexora One</span>
-          <span className="text-[10px] font-medium mt-0.5">Build version 1.0.0 (Release)</span>
-          <span className="text-[9px] font-mono tracking-wider opacity-60 mt-1">OFFLINE LOCAL CACHE READY</span>
+          <span className="text-[10px] font-medium mt-0.5">Build version 2.0.0 (Universal Release)</span>
+          <span className="text-[10px] font-black text-brand-blue dark:text-brand-cyan tracking-wider mt-1">
+            Developed by Trivin
+          </span>
+          <span className="text-[9px] font-mono tracking-wider opacity-60 mt-0.5">SUPABASE CLOUD & OFFLINE READY</span>
         </div>
       </div>
     </div>

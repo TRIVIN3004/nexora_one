@@ -15,6 +15,7 @@ import { AppDetailsModal } from './components/AppDetailsModal';
 import { OfflineAlertModal } from './components/OfflineAlertModal';
 import { CalendarTool } from './components/CalendarTool';
 import { CalculatorTool } from './components/CalculatorTool';
+import { AttendanceModal } from './components/AttendanceModal';
 
 // 5 Core Integrated Portals
 import { NexoraConnectPortal } from './portals/NexoraConnectPortal';
@@ -40,6 +41,9 @@ function App() {
   
   // Active Core Portal state
   const [activePortal, setActivePortal] = useState<PortalType | null>(null);
+
+  // Cloud Attendance Modal state
+  const [isAttendanceModalOpen, setIsAttendanceModalOpen] = useState(false);
 
   // Desktop Responsive Mode
   const [isDesktopMode, setIsDesktopMode] = useState<boolean>(() => {
@@ -204,13 +208,23 @@ function App() {
   const renderActiveContent = () => {
     // 1. Render active integrated portal
     if (activePortal === 'connect') {
-      return <NexoraConnectPortal onBack={() => setActivePortal(null)} />;
+      return (
+        <NexoraConnectPortal 
+          onBack={() => setActivePortal(null)} 
+          onOpenAttendance={() => setIsAttendanceModalOpen(true)}
+        />
+      );
     }
     if (activePortal === 'showcase') {
       return <NexoraShowcasePortal onBack={() => setActivePortal(null)} />;
     }
     if (activePortal === 'dpr') {
-      return <DailyProgressPortal onBack={() => setActivePortal(null)} />;
+      return (
+        <DailyProgressPortal 
+          onBack={() => setActivePortal(null)} 
+          onOpenAttendance={() => setIsAttendanceModalOpen(true)}
+        />
+      );
     }
     if (activePortal === 'prdams') {
       return <PrdamsPortal onBack={() => setActivePortal(null)} />;
@@ -236,6 +250,7 @@ function App() {
             onOpenApp={handleOpenApp}
             onOpenDetails={setSelectedApp}
             onNavigateToCatalog={() => handleTabChange('apps')}
+            onOpenAttendance={() => setIsAttendanceModalOpen(true)}
             isOnline={isOnline}
           />
         );
@@ -293,6 +308,7 @@ function App() {
           onOpenPortal={setActivePortal}
           onOpenCalendar={() => setIsCalendarOpen(true)}
           onOpenCalculator={() => setIsCalculatorOpen(true)}
+          onOpenAttendance={() => setIsAttendanceModalOpen(true)}
           isDesktopMode={isDesktopMode}
           onToggleDesktopMode={toggleDesktopMode}
           activePortal={activePortal}
@@ -348,6 +364,12 @@ function App() {
         <CalculatorTool
           isOpen={isCalculatorOpen}
           onClose={() => setIsCalculatorOpen(false)}
+        />
+
+        {/* DPR Supabase Cloud Attendance Modal */}
+        <AttendanceModal
+          isOpen={isAttendanceModalOpen}
+          onClose={() => setIsAttendanceModalOpen(false)}
         />
       </div>
     </div>

@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Logo } from '../components/Logo';
 import type { Application } from '../config/applications';
 import { AppCard } from '../components/AppCard';
-import { Star, ArrowRight } from 'lucide-react';
+import { Star, ArrowRight, Clock, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { dprAttendanceService } from '../services/dprAttendanceService';
+import type { AttendanceRecord } from '../services/dprAttendanceService';
 
 interface HomeProps {
   apps: Application[];
@@ -12,6 +14,7 @@ interface HomeProps {
   onOpenApp: (app: Application) => void;
   onOpenDetails: (app: Application) => void;
   onNavigateToCatalog: () => void;
+  onOpenAttendance: () => void;
   isOnline: boolean;
 }
 
@@ -23,8 +26,34 @@ export const Home: React.FC<HomeProps> = ({
   onOpenApp,
   onOpenDetails,
   onNavigateToCatalog,
+  onOpenAttendance,
   isOnline
 }) => {
+  const [todayRecord, setTodayRecord] = useState<AttendanceRecord | null>(null);
+
+  // Check attendance status on mount and when updated
+  useEffect(() => {
+    const updateAttendance = async () => {
+      const user = dprAttendanceService.getSavedSession();
+      if (user) {
+        const rec = await dprAttendanceService.getTodayAttendanceRecord(user.id);
+        setTodayRecord(rec);
+      } else {
+        setTodayRecord(null);
+      }
+    };
+
+    updateAttendance();
+
+    const handleUpdate = () => updateAttendance();
+    window.addEventListener('nexora_attendance_updated', handleUpdate);
+    window.addEventListener('nexora_auth_changed', handleUpdate);
+    return () => {
+      window.removeEventListener('nexora_attendance_updated', handleUpdate);
+      window.removeEventListener('nexora_auth_changed', handleUpdate);
+    };
+  }, []);
+
   // Resolve current greeting based on time of day
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -37,7 +66,6 @@ export const Home: React.FC<HomeProps> = ({
   const favoriteApps = apps.filter(app => favorites.includes(app.id));
   const recentApps = apps
     .filter(app => recents.includes(app.id))
-    // Keep the order of insertion from the recents list
     .sort((a, b) => recents.indexOf(a.id) - recents.indexOf(b.id));
 
   return (
@@ -99,6 +127,53 @@ export const Home: React.FC<HomeProps> = ({
         </div>
       </div>
 
+      {/* DPR Attendance Punch Banner (Direct Cloud Sync) */}
+      <div className="mt-4 glass-effect rounded-[28px] p-4 border border-emerald-500/25 dark:border-emerald-500/35 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-cyan-500/10 relative overflow-hidden">
+        <div className="flex items-center justify-between gap-3 relative z-10">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-11 h-11 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center border border-emerald-500/30 shadow-xs shrink-0">
+              <Clock className="w-5 h-5 animate-pulse" />
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <h4 className="text-xs font-black text-brand-navy dark:text-white uppercase tracking-wider truncate">
+                  DPR Attendance Punch
+                </h4>
+                <span className="text-[9px] uppercase px-1.5 py-0.2 rounded-md bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 font-extrabold shrink-0">
+                  Supabase Live
+                </span>
+              </div>
+              <p className="text-[10px] text-brand-secondary mt-0.5 truncate">
+                {todayRecord && todayRecord.checkInTime 
+                  ? `Checked In at ${todayRecord.checkInTime} • ${todayRecord.status}`
+                  : 'Independent attendance verification with DPR credentials'}
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={onOpenAttendance}
+            className={`px-4 py-2.5 rounded-xl text-white text-xs font-black uppercase tracking-wider shadow-md active:scale-95 transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
+              todayRecord && todayRecord.checkInTime
+                ? 'bg-gradient-to-r from-teal-500 to-cyan-500 hover:shadow-cyan-500/25'
+                : 'bg-gradient-to-r from-emerald-500 to-teal-500 hover:shadow-emerald-500/25'
+            }`}
+          >
+            {todayRecord && todayRecord.checkInTime ? (
+              <>
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span>Status</span>
+              </>
+            ) : (
+              <>
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>Punch Attendance</span>
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+
       {/* 5 Core Portals Showcase */}
       <div className="mt-6 select-none">
         <div className="flex justify-between items-center mb-2 px-1">
@@ -154,7 +229,6 @@ export const Home: React.FC<HomeProps> = ({
                   className="w-9 h-9 rounded-xl flex items-center justify-center text-white"
                   style={{ background: `linear-gradient(135deg, ${app.color}dd, ${app.color})` }}
                 >
-                  {/* Miniature representations of application icons */}
                   <span className="text-sm font-black uppercase tracking-tighter">
                     {app.shortName.slice(0, 2)}
                   </span>
@@ -211,6 +285,17 @@ export const Home: React.FC<HomeProps> = ({
             </span>
           </div>
         )}
+      </div>
+
+      {/* Footer Attribution - Developed by Trivin */}
+      <div className="mt-10 flex flex-col items-center text-center pb-2">
+        <div className="w-8 h-[1px] bg-black/10 dark:bg-white/10 mb-2" />
+        <span className="text-[10px] font-black uppercase tracking-widest text-brand-blue dark:text-brand-cyan">
+          Developed by Trivin
+        </span>
+        <span className="text-[8px] text-slate-400 font-semibold tracking-wider">
+          Chief Architect & Lead Developer • Nexora Technologies
+        </span>
       </div>
     </div>
   );

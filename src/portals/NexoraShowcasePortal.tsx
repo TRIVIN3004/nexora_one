@@ -329,28 +329,31 @@ export const NexoraShowcasePortal: React.FC<NexoraShowcasePortalProps> = ({ onBa
           </div>
         </div>
 
-        {/* LEADERSHIP & ARCHITECTS */}
+        {/* LEADERSHIP & ARCHITECT - DEVELOPED BY TRIVIN */}
         <div className="space-y-4">
           <div>
-            <span className="text-xs font-black uppercase tracking-widest text-brand-blue dark:text-brand-cyan">Engineering Leadership</span>
-            <h2 className="text-xl sm:text-2xl font-black text-brand-navy dark:text-white mt-1">Core Architects</h2>
+            <span className="text-xs font-black uppercase tracking-widest text-brand-blue dark:text-brand-cyan">Engineering & Architecture</span>
+            <h2 className="text-xl sm:text-2xl font-black text-brand-navy dark:text-white mt-1">Developed by Trivin</h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {[
-              { name: 'Aakash Raj', role: 'Co-Founder & CTO', focus: 'AI Systems & Swarms', tag: 'Architecture' },
-              { name: 'Arutselvan', role: 'AI Research Lead', focus: 'LLMs & Edge Inference', tag: 'Machine Learning' },
-              { name: 'Naveen', role: 'Operations & Full-Stack Lead', focus: 'Cloud Systems & Scalability', tag: 'Engineering' }
-            ].map((lead, idx) => (
-              <div key={idx} className="p-5 rounded-3xl bg-white dark:bg-[#06152F]/70 border border-black/5 dark:border-white/10 shadow-sm space-y-2">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-blue to-brand-cyan flex items-center justify-center text-white font-black text-lg">
-                  {lead.name.slice(0, 2).toUpperCase()}
-                </div>
-                <h4 className="text-sm font-black text-brand-navy dark:text-white">{lead.name}</h4>
-                <p className="text-xs font-bold text-brand-blue dark:text-brand-cyan">{lead.role}</p>
-                <p className="text-[11px] text-slate-500">{lead.focus}</p>
+          <div className="p-6 rounded-3xl bg-gradient-to-br from-white to-slate-50 dark:from-[#06152F] dark:to-[#030914] border border-brand-cyan/25 shadow-xl flex flex-col sm:flex-row items-center gap-6">
+            <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-brand-blue via-sky-400 to-brand-cyan flex items-center justify-center text-white font-black text-3xl shadow-lg shadow-brand-blue/30 shrink-0">
+              TR
+            </div>
+            <div className="space-y-1.5 text-center sm:text-left flex-1">
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                <h3 className="text-xl font-black text-brand-navy dark:text-white">Trivin</h3>
+                <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-brand-blue/15 text-brand-blue dark:text-brand-cyan border border-brand-blue/25">
+                  Chief Architect & Lead Developer
+                </span>
               </div>
-            ))}
+              <p className="text-xs font-bold text-brand-blue dark:text-brand-cyan">
+                Sole Architect & Creator of the Nexora One Ecosystem
+              </p>
+              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl">
+                Engineered the entire Nexora One unified multi-platform application across Android, iOS, and Desktop, incorporating all five core portal subsystems, real-time cryptographic verification, attendance automation, and offline resilience.
+              </p>
+            </div>
           </div>
         </div>
 
